@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    </head>
+    <body>
+        <div class="container">
+
+            <div id="task-container">
+                <div id="form-wrapper">
+                        <div class="flex-wrapper">
+
+                        </div>
+                </div>
+    
+                <div id="list-wrapper">
+                
+                </div>	
+            </div>
+    
+        </div>
+    </body>
+
+    <script  type="text/javascript">
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        buildList()
+        function buildList(){
+            var wrapper = document.getElementById('list-wrapper')
+            var url = 'http://127.0.0.1:8000/api/listfiles/'
+
+            fetch(url)
+            .then((resp)=>{
+                return resp.json()
+            })
+            .then(function(data){
+                console.log('Data:', data)
+
+                var list = data
+                for (var i in list){
+                    
+					try{
+						document.getElementById(`data-row-${i}`).remove()
+					}catch(err){
+
+					}
+                    var title = `<span class="title">${list[i].file}</span>`
+
+                    var item = `
+                    <div id="data-row-${i}" class="task-wrapper flex-wrapper">
+                        <a href="${list[i].file}" download='MinaRaouf'>
+                            ${list[i].file}
+                        </a>
+        
+
+                    </div>
+                `
+                wrapper.innerHTML += item
+
+
+                }
+            })
+
+        }
+
+    </script>
+
+</html>
